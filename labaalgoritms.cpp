@@ -22,13 +22,13 @@ void PrintMatrix(int** matrix, int m, int n)
 
 	for (int i = 0; i < m; i++) {
 		for (int j = 0; j < n; j++) {
-			cout << matrix[i][j] << "\t";
+			cout << matrix[i][j] <<  "\t";
 		}
 		cout << endl;
 	}
 }
 
-// Функція для знаходження максимального елемента в матриці
+// Функція для знаходження максимального елемента  в матриці
 int FindMax(int** matrix, int n, int m)
 {
 	int maximum = matrix[0][0];
