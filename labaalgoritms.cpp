@@ -28,7 +28,7 @@ void PrintMatrix(int** matrix, int m, int n)
 	}
 }
 
-// Функція для знаходження максимального елемента  в матриці
+// Функція для знаходження максимального елемента в матриці
 int FindMax(int** matrix, int n, int m)
 {
 	int maximum = matrix[0][0];
