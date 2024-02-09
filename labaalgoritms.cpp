@@ -2,6 +2,7 @@
 #include <cmath> 
 #include <cstdlib> 
 #include <fstream>
+#include <ctime>
 
 using namespace std;
 
@@ -139,13 +140,14 @@ int main(int minElement, int minRow, int minColumn)
 
 	setlocale(LC_ALL, "ru");
 
-	cout << "Виконав студен 1 курсу Сторожук Назар Валерійович Группи ІР-12 3 підгрупи" << endl;
+	cout << "Виконав студент 1 курсу Сторожук Назар Валерійович Группи ІР-12 3 підгрупи" << endl;
 
 	cout << "Варіант 13 згідно списків" << endl << "Рівенб складності: A" << endl << endl;
 
 	int choice = 0;
 
-	srand(time(nullptr));
+	srand(time(nullptr)); // Инициализация генератора случайных чисел
+
 	int** matrix = nullptr;
 	int n = 0;
 	int m = 0;
@@ -159,25 +161,38 @@ int main(int minElement, int minRow, int minColumn)
 		return 1;
 	}
 	else if (n == m) {
-		cout << "should be diferent" << endl;
+		cout << "should be different" << endl;
 		return 1;
 	}
 
-
-
-	// Створення і генерація матриці A
 	int** MatrixA = CreateMatrix(m, n);
-
-	// Створення і генерація матриці B
 	int** MatrixB = CreateMatrix(m, n);
 
 	cout << "1: Fill from console;" << endl;
-	cout << "2:Fill from from file;" << endl;
+	cout << "2: Fill from file;" << endl;
 	cin >> choice;
 
 	if (choice == 1) {
+		cout << "Matrix A: " << endl;
 		PrintMatrix(MatrixA, m, n);
+		cout << endl;
+
+		cout << "Matrix B: " << endl;
 		PrintMatrix(MatrixB, m, n);
+		cout << endl;
+
+		int maxB = FindMax(MatrixB, m, n);
+
+		ZbilshitiMatrix(MatrixA, m, n, maxB);
+
+		SwapCols(MatrixA, m, n);
+
+		cout << "Max element matrix B: " << maxB << endl << endl;
+		cout << "Modified matrix A: " << endl;
+		PrintMatrix(MatrixA, m, n);
+
+		RemoveMem(MatrixA, m);
+		RemoveMem(MatrixB, m);
 	}
 	else if (choice == 2) {
 		file("a.txt", n * m);
@@ -186,43 +201,11 @@ int main(int minElement, int minRow, int minColumn)
 		file_auto("b.txt", m, n, MatrixB);
 	}
 	else {
-		cout << "Invalid choise.";
+		cout << "Invalid choice.";
 		return 1;
 	}
 
-	// Виведення початкових матриць A і B
-	cout << "Matrix A: " << endl;
-	PrintMatrix(MatrixA, m, n);
-	cout << endl;
-
-
-	cout << "Matrix B: " << endl;
-	PrintMatrix(MatrixB, m, n);
-	cout << endl;
-
-
-	//Знайдемо максимальний елемент матриці B
-	int maxB = FindMax(MatrixB, m, n);
-
-	// збільшимо всі елементи матриці A на максимальний елемент матриці B
-	ZbilshitiMatrix(MatrixA, m, n, maxB);
-
-	// Поміняємо місцями перший і останній стовпці матриці A
-	SwapCols(MatrixA, m, n);
-
-
-
-	// Виведення результатів
-	cout << "Max element matrix B: " << maxB << endl << endl;
-
-	cout << "Modified matrix A: " << endl;
-
-	PrintMatrix(MatrixA, m, n);
-
-	// Звільнення виділеної пам'яті
-	RemoveMem(MatrixA, m);
-	RemoveMem(MatrixB, m);
-
+	
 	return 0;
 
 }
