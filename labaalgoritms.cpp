@@ -3,8 +3,10 @@
 #include <cstdlib> 
 #include <fstream>
 #include <ctime>
+#include <chrono>
 
 using namespace std;
+
 
 
 // Вивід матриці в консоль
@@ -137,6 +139,23 @@ void WriteMatrixToFile(ofstream& ofs, int** matrix, int m, int n, const string& 
 	}
 	ofs << endl;
 }
+double TimeExecution(void(*function)(int**, int, int, int), int** matrix, int m, int n, int zxc)
+{
+	// Отримуємо поточний час до початку виконання функції
+	auto start = chrono::high_resolution_clock::now();
+
+	// Викликаємо передану функцію
+	function(matrix, m, n, zxc);
+
+	// Отримуємо поточний час після виконання функції
+	auto end = chrono::high_resolution_clock::now();
+
+	// Обчислюємо час виконання у секундах
+	chrono::duration<double> elapsed = (end - start) / CLOCKS_PER_SEC;
+
+	// Повертаємо час виконання
+	return elapsed.count();
+}
 
 
 int main(int minElement, int minRow, int minColumn)
@@ -183,15 +202,25 @@ int main(int minElement, int minRow, int minColumn)
 		PrintMatrix(MatrixB, m, n);
 		cout << endl;
 
+		
+
 		int maxB = FindMax(MatrixB, m, n);
 
+		/*
+		double zbilshitiMatrix = TimeExecution(ZbilshitiMatrix, MatrixA, m, n, maxB);
+		cout << "secs: " << zbilshitiMatrix << "secs";
+		*/
+
 		ZbilshitiMatrix(MatrixA, m, n, maxB);
+		
+		
 
 		SwapCols(MatrixA, m, n);
 
 		cout << "Max element matrix B: " << maxB << endl << endl;
 		cout << "Modified matrix A: " << endl;
 		PrintMatrix(MatrixA, m, n);
+		
 
 	}
 	else if (choice == 2) {
@@ -259,6 +288,7 @@ int main(int minElement, int minRow, int minColumn)
 
 	return 0;
 }
+
 
 
 
