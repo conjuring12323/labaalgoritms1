@@ -6,17 +6,6 @@
 
 using namespace std;
 
-void console(int** matrix, int m, int n)
-{
-	for (int i = 0; i < m; i++) {
-
-		for (int j = 0; j < n; j++) {
-			cin >> matrix[i][j];
-		}
-		cout << endl;
-	}
-	cout << endl;
-}
 
 // Вивід матриці в консоль
 void PrintMatrix(int** matrix, int m, int n)
@@ -46,7 +35,7 @@ int FindMax(int** matrix, int n, int m)
 	return maximum;
 }
 
-//Функція для ізбульшення елементів матриці
+//Функція для збільшення елементів матриці
 void ZbilshitiMatrix(int** matrix, int m, int n, int zxc)
 {
 	for (int i = 0; i < m; i++) {
@@ -73,6 +62,7 @@ void RemoveMem(int** matrix, int m)
 	delete[] matrix;
 }
 
+/*
 // Функція для заміни від'ємних елементів матриці B мінімальним елементом матриці A
 void Replace(int** MatrixA, int** MatrixB, int m, int n, int minA)
 {
@@ -84,6 +74,7 @@ void Replace(int** MatrixA, int** MatrixB, int m, int n, int minA)
 		}
 	}
 }
+*/
 
 // Функція для створення і генерації чисел для матриці
 int** CreateMatrix(int m, int n)
@@ -135,13 +126,24 @@ void file_auto(const string& file_name, int m, int n, int** matrix)
 	ifs.close();
 }
 
+void WriteMatrixToFile(ofstream& ofs, int** matrix, int m, int n, const string& matrixName)
+{
+	ofs << matrixName << ":" << endl;
+	for (int i = 0; i < m; ++i) {
+		for (int j = 0; j < n; ++j) {
+			ofs << matrix[i][j] << "\t";
+		}
+		ofs << endl;
+	}
+	ofs << endl;
+}
+
+
 int main(int minElement, int minRow, int minColumn)
 {
-
 	setlocale(LC_ALL, "ru");
 
 	cout << "Виконав студент 1 курсу Сторожук Назар Валерійович Группи ІР-12 3 підгрупи" << endl;
-
 	cout << "Варіант 13 згідно списків" << endl << "Рівенб складності: A" << endl << endl;
 
 	int choice = 0;
@@ -152,9 +154,9 @@ int main(int minElement, int minRow, int minColumn)
 	int n = 0;
 	int m = 0;
 
-	cout << "m(рядки) :";
+	cout << "m(рядки) > 6 m != n:";
 	cin >> m;
-	cout << "n(стовпці) :";
+	cout << "n(стовпці) > 6 n != m:";
 	cin >> n;
 	if (n < 6 || m < 6) {
 		cout << "n and m should be > 6 " << endl;
@@ -168,8 +170,8 @@ int main(int minElement, int minRow, int minColumn)
 	int** MatrixA = CreateMatrix(m, n);
 	int** MatrixB = CreateMatrix(m, n);
 
-	cout << "1: Fill from console;" << endl;
-	cout << "2: Fill from file;" << endl;
+	cout << "1:записати матрицю в консоль;" << endl;
+	cout << "2:записати матрицю в файл;" << endl;
 	cin >> choice;
 
 	if (choice == 1) {
@@ -191,23 +193,71 @@ int main(int minElement, int minRow, int minColumn)
 		cout << "Modified matrix A: " << endl;
 		PrintMatrix(MatrixA, m, n);
 
-		RemoveMem(MatrixA, m);
-		RemoveMem(MatrixB, m);
 	}
 	else if (choice == 2) {
 		file("a.txt", n * m);
 		file("b.txt", n * m);
 		file_auto("a.txt", m, n, MatrixA);
 		file_auto("b.txt", m, n, MatrixB);
+
+		cout << "Matrix A: " << endl;
+		PrintMatrix(MatrixA, m, n);
+		cout << endl;
+
+		cout << "Matrix B: " << endl;
+		PrintMatrix(MatrixB, m, n);
+		cout << endl;
+	
 	}
 	else {
 		cout << "Invalid choice.";
 		return 1;
 	}
 
-	
-	return 0;
+	cout << "Виберіть дію:" << endl;
+	cout << "1:Закрити програму" << endl;
+	cout << "2:Записати склад консолі в файл" << endl;
+	cin >> choice;
 
+	if (choice == 1) {
+		RemoveMem(MatrixA, m);
+		RemoveMem(MatrixB, m);
+		return 0;
+	}
+	else if (choice == 2) {
+		// Запис складу у файл
+		file("a.txt", n * m);
+		file("b.txt", n * m);
+		/*
+		file_auto("a.txt", m, n, MatrixA);
+		file_auto("b.txt", m, n, MatrixB);
+		*/
+
+		
+		cout << "Matrix A: " << endl;
+		PrintMatrix(MatrixA, m, n);
+		cout << endl;
+
+		cout << "Matrix B: " << endl;
+		PrintMatrix(MatrixB, m, n);
+		cout << endl;
+
+
+		// Запусуємо склад консолі у файл
+		ofstream ofs("output.txt");
+		WriteMatrixToFile(ofs, MatrixA, m, n, "Matrix A");
+		WriteMatrixToFile(ofs, MatrixB, m, n, "Matrix B");
+		ofs.close();
+		cout << "Склад консолі успішно записаний у файл'" << endl;
+	}
+	else {
+		cout << "Invalid choice. Exiting program." << endl;
+	}
+
+	RemoveMem(MatrixA, m);
+	RemoveMem(MatrixB, m);
+
+	return 0;
 }
 
 
