@@ -139,27 +139,28 @@ void WriteMatrixToFile(ofstream& ofs, int** matrix, int m, int n, const string& 
 	}
 	ofs << endl;
 }
-/*
-double TimeExecution(void(*function)(int**, int, int, int), int** matrix, int m, int n, int zxc)
+// Функція для вимірювання часу виконання алгоритму в мілісекундах
+double MeasureAlgorithmTimeMilliseconds(void(*function)(int**, int, int, int), int** matrix, int m, int n, int zxc)
 {
-	
+	// Визначення типу для точки початку та кінця часу
+	using Clock = std::chrono::high_resolution_clock;
 
-	// Отримуємо поточний час до початку виконання функції
-	auto start = chrono::high_resolution_clock::now();
+	// Позначка часу до виконання алгоритму
+	auto start = Clock::now();
 
-	// Викликаємо передану функцію
+	// Виконання алгоритму
 	function(matrix, m, n, zxc);
 
-	// Отримуємо поточний час після виконання функції
-	auto end = chrono::high_resolution_clock::now();
+	// Позначка часу після виконання алгоритму
+	auto end = Clock::now();
 
-	// Обчислюємо час виконання у секундах
-	chrono::duration<double> elapsed = (end - start) / CLOCKS_PER_SEC;
+	// Обчислення часу виконання у мілісекундах
+	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 
-	// Повертаємо час виконання
-	return elapsed.count();
+	// Повертаємо час виконання у мілісекундах у вигляді double
+	return duration.count();
 }
-*/
+
 
 void MeasureAlgoritmTime(void(*function)(int**, int, int, int), int** matrix, int m, int n, int zxc)
 {
@@ -217,17 +218,11 @@ int main()
 		PrintMatrix(MatrixB, m, n);
 		cout << endl;
 
-		
-
 		int maxB = FindMax(MatrixB, m, n);
 
-		
-
-		
-		
 		ZbilshitiMatrix(MatrixA, m, n, maxB);
-
-		MeasureAlgoritmTime(ZbilshitiMatrix, MatrixA, m, n, maxB);
+		
+		//MeasureAlgoritmTime(ZbilshitiMatrix, MatrixA, m, n, maxB);
 
 		SwapCols(MatrixA, m, n);
 
