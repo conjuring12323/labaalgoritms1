@@ -139,8 +139,11 @@ void WriteMatrixToFile(ofstream& ofs, int** matrix, int m, int n, const string& 
 	}
 	ofs << endl;
 }
+/*
 double TimeExecution(void(*function)(int**, int, int, int), int** matrix, int m, int n, int zxc)
 {
+	
+
 	// Отримуємо поточний час до початку виконання функції
 	auto start = chrono::high_resolution_clock::now();
 
@@ -156,9 +159,21 @@ double TimeExecution(void(*function)(int**, int, int, int), int** matrix, int m,
 	// Повертаємо час виконання
 	return elapsed.count();
 }
+*/
 
+void MeasureAlgoritmTime(void(*function)(int**, int, int, int), int** matrix, int m, int n, int zxc)
+{
+	clock_t Start_t = clock();
 
-int main(int minElement, int minRow, int minColumn)
+	function(matrix, m, n, zxc);// Викликаємо ваш алгоритм
+
+	clock_t End_t = clock();
+	double MeasureTime = static_cast<double>(End_t - Start_t) / CLOCKS_PER_SEC;
+
+	cout << "Час виконання алгоритму: " << MeasureTime << " секунд" << endl;
+}
+
+int main()
 {
 	setlocale(LC_ALL, "ru");
 
@@ -167,7 +182,7 @@ int main(int minElement, int minRow, int minColumn)
 
 	int choice = 0;
 
-	srand(time(nullptr)); // Инициализация генератора случайных чисел
+	srand(time(nullptr)); // Инициализация генератора випадкових чисел
 
 	int** matrix = nullptr;
 	int n = 0;
@@ -206,16 +221,17 @@ int main(int minElement, int minRow, int minColumn)
 
 		int maxB = FindMax(MatrixB, m, n);
 
-		/*
-		double zbilshitiMatrix = TimeExecution(ZbilshitiMatrix, MatrixA, m, n, maxB);
-		cout << "secs: " << zbilshitiMatrix << "secs";
-		*/
+		
 
+		
+		
 		ZbilshitiMatrix(MatrixA, m, n, maxB);
-		
-		
+
+		MeasureAlgoritmTime(ZbilshitiMatrix, MatrixA, m, n, maxB);
 
 		SwapCols(MatrixA, m, n);
+
+		//MeasureAlgoritmTime(SwapCols, matrix, m, n, 0);
 
 		cout << "Max element matrix B: " << maxB << endl << endl;
 		cout << "Modified matrix A: " << endl;
