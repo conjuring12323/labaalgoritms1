@@ -48,7 +48,7 @@ void ZbilshitiMatrix(int** matrix, int m, int n, int zxc)
 }
 
 // Функція для заміни стовпців
-void SwapCols(int** matrix, int m, int n)
+void SwapCols(int** matrix, int m, int n, int zxc)
 {
 	for (int i = 0; i < m; i++) {
 		swap(matrix[i][0], matrix[i][n - 1]);
@@ -139,6 +139,8 @@ void WriteMatrixToFile(ofstream& ofs, int** matrix, int m, int n, const string& 
 	}
 	ofs << endl;
 }
+
+/*
 // Функція для вимірювання часу виконання алгоритму в мілісекундах
 double MeasureAlgorithmTimeMilliseconds(void(*function)(int**, int, int, int), int** matrix, int m, int n, int zxc)
 {
@@ -160,7 +162,7 @@ double MeasureAlgorithmTimeMilliseconds(void(*function)(int**, int, int, int), i
 	// Повертаємо час виконання у мілісекундах у вигляді double
 	return duration.count();
 }
-
+*/
 
 void MeasureAlgoritmTime(void(*function)(int**, int, int, int), int** matrix, int m, int n, int zxc)
 {
@@ -171,19 +173,19 @@ void MeasureAlgoritmTime(void(*function)(int**, int, int, int), int** matrix, in
 	clock_t End_t = clock();
 	double MeasureTime = static_cast<double>(End_t - Start_t) / CLOCKS_PER_SEC;
 
-	cout << "Час виконання алгоритму: " << MeasureTime << " секунд" << endl;
+	cout << "Час виконання алгоритму : " << MeasureTime << " секунд" << endl;
 }
 
 int main()
 {
-	setlocale(LC_ALL, "ru");
+	setlocale(LC_CTYPE, "ukr");
 
 	cout << "Виконав студент 1 курсу Сторожук Назар Валерійович Группи ІР-12 3 підгрупи" << endl;
 	cout << "Варіант 13 згідно списків" << endl << "Рівенб складності: A" << endl << endl;
 
 	int choice = 0;
 
-	srand(time(nullptr)); // Инициализация генератора випадкових чисел
+	srand(unsigned int (time(nullptr))); // Инициализация генератора випадкових чисел
 
 	int** matrix = nullptr;
 	int n = 0;
@@ -210,44 +212,63 @@ int main()
 	cin >> choice;
 
 	if (choice == 1) {
-		cout << "Matrix A: " << endl;
-		PrintMatrix(MatrixA, m, n);
-		cout << endl;
 
-		cout << "Matrix B: " << endl;
-		PrintMatrix(MatrixB, m, n);
-		cout << endl;
+		bool vibir = 0;
+		cout << "You wanna see the matrix? (1/0)" << endl;
+		cin >> vibir;
+		if (vibir) {
+			cout << "Matrix A: " << endl;
+			PrintMatrix(MatrixA, m, n);
+			cout << endl;
+
+			cout << "Matrix B: " << endl;
+			PrintMatrix(MatrixB, m, n);
+			cout << endl;
+		}
+
+		
 
 		int maxB = FindMax(MatrixB, m, n);
 
-		ZbilshitiMatrix(MatrixA, m, n, maxB);
 		
-		//MeasureAlgoritmTime(ZbilshitiMatrix, MatrixA, m, n, maxB);
+		//ZbilshitiMatrix(MatrixA, m, n, maxB);
+		
+		MeasureAlgoritmTime(ZbilshitiMatrix, MatrixA, m, n, maxB);
 
-		SwapCols(MatrixA, m, n);
+		//SwapCols(MatrixA, m, n);
 
-		//MeasureAlgoritmTime(SwapCols, matrix, m, n, 0);
+		MeasureAlgoritmTime(SwapCols, MatrixA, m, n, 0);
 
 		cout << "Max element matrix B: " << maxB << endl << endl;
-		cout << "Modified matrix A: " << endl;
-		PrintMatrix(MatrixA, m, n);
 		
-
+		cout << "You wanna see the modified matrix? (1/0)" << endl;
+		cin >> vibir;
+		cout << "Modified matrix A: " << endl;
+		if (vibir) {
+			PrintMatrix(MatrixA, m, n);
+		}
+		
 	}
 	else if (choice == 2) {
+		bool vibir = 0;
+		// n * m задає розмір файла при створенні
 		file("a.txt", n * m);
 		file("b.txt", n * m);
 		file_auto("a.txt", m, n, MatrixA);
 		file_auto("b.txt", m, n, MatrixB);
 
-		cout << "Matrix A: " << endl;
-		PrintMatrix(MatrixA, m, n);
-		cout << endl;
+		cout << "You wanna see the  matrix? (1/0)" << endl;
+		cin >> vibir;
+		
+		if (vibir) {
+			cout << "Matrix A: " << endl;
+			PrintMatrix(MatrixA, m, n);
+			cout << endl;
 
-		cout << "Matrix B: " << endl;
-		PrintMatrix(MatrixB, m, n);
-		cout << endl;
-	
+			cout << "Matrix B: " << endl;
+			PrintMatrix(MatrixB, m, n);
+			cout << endl;
+		}
 	}
 	else {
 		cout << "Invalid choice.";
@@ -265,6 +286,7 @@ int main()
 		return 0;
 	}
 	else if (choice == 2) {
+		bool vibir = 0;
 		// Запис складу у файл
 		file("a.txt", n * m);
 		file("b.txt", n * m);
@@ -273,16 +295,19 @@ int main()
 		file_auto("b.txt", m, n, MatrixB);
 		*/
 
+		cout << "You wanna see the  matrix? (1/0)" << endl;
+		cin >> vibir;
+
+		if (vibir) {
+			cout << "Matrix A: " << endl;
+			PrintMatrix(MatrixA, m, n);
+			cout << endl;
+
+			cout << "Matrix B: " << endl;
+			PrintMatrix(MatrixB, m, n);
+			cout << endl;
+		}
 		
-		cout << "Matrix A: " << endl;
-		PrintMatrix(MatrixA, m, n);
-		cout << endl;
-
-		cout << "Matrix B: " << endl;
-		PrintMatrix(MatrixB, m, n);
-		cout << endl;
-
-
 		// Запусуємо склад консолі у файл
 		ofstream ofs("output.txt");
 		WriteMatrixToFile(ofs, MatrixA, m, n, "Matrix A");
