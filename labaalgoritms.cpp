@@ -4,7 +4,7 @@
 #include <fstream>
 #include <ctime>
 #include <chrono>
-
+#include<Windows.h>
 using namespace std;
 
 
@@ -178,7 +178,8 @@ void MeasureAlgoritmTime(void(*function)(int**, int, int, int), int** matrix, in
 
 int main()
 {
-	setlocale(LC_CTYPE, "ukr");
+	SetConsoleOutputCP(1251);
+	SetConsoleCP(1251);
 
 	cout << "Виконав студент 1 курсу Сторожук Назар Валерійович Группи ІР-12 3 підгрупи" << endl;
 	cout << "Варіант 13 згідно списків" << endl << "Рівенб складності: A" << endl << endl;
