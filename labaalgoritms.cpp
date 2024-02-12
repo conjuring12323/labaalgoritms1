@@ -328,12 +328,12 @@ int main()
 
 		int maxB = FindMax(MatrixB, m, n);
 
-		//ZbilshitiMatrix(MatrixA, m, n, maxB);
-		//MeasureAlgoritmTime(ZbilshitiMatrix, MatrixA, m, n, maxB);
-		//SwapCols(MatrixA, m, n);
-		//MeasureAlgoritmTime(SwapCols, MatrixA, m, n, NULL);
+		ZbilshitiMatrix(MatrixA, m, n, maxB);
+		MeasureAlgoritmTime(ZbilshitiMatrix, MatrixA, m, n, maxB);
+		SwapCols(MatrixA, m, n, NULL);
+		MeasureAlgoritmTime(SwapCols, MatrixA, m, n, NULL);
 
-
+		
 		cout << "Замір часу для першого алгоритму: " << endl;
 		cout << "Max element matrix B: " << maxB << endl << endl;
 		cout << "Amount of itarationns: ";
@@ -352,7 +352,7 @@ int main()
 		cout << "Put max matrix size: ";
 		cin >> n1;
 		time2(m, count, k, n1);
-
+		
 		cout << "You wanna see the modified matrix? (1/0)" << endl;
 		cin >> vibir;
 		cout << "Modified matrix A: " << endl;
