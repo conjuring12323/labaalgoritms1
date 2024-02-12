@@ -176,7 +176,7 @@ void SwapCols(int** matrix, int m, int n, int zxc)
 		swap(matrix[i][0], matrix[i][n - 1]);
 	}
 }
-void time(int m, int count, int k, int n1)
+void time1(int m, int count, int k, int n1)
 {
 	double start = 0, end = 0, average = 0;
 
@@ -201,10 +201,9 @@ void time(int m, int count, int k, int n1)
 				int** MatrixA = CreateMatrix(m, n);
 				int** MatrixB = CreateMatrix(m, n);
 
-				cout << "time of the first algoritm: ";
+				
 				int maxB = FindMax(MatrixB, m, n);
 				ZbilshitiMatrix(MatrixA, m, n, maxB);
-
 
 				RemoveMem(MatrixA, m);
 				RemoveMem(MatrixB, m);
@@ -213,8 +212,8 @@ void time(int m, int count, int k, int n1)
 
 				average += end;
 
-				cout << "Час виконання програми на кількості данних " << i << ": " << end << endl;
-				results << "Час виконання програми на кількості данних " << i << ": " << end << endl;
+				cout << "Час виконання програми на кількості данних першого алгоритму: " << i << ": " << end << endl;
+				results << "Час виконання програми на кількості данних першого алгоритму: " << i << ": " << end << endl;
 			}
 
 			average = average / count;
@@ -226,10 +225,58 @@ void time(int m, int count, int k, int n1)
 
 	results.close();
 }
+void time2(int m, int count, int k, int n1)
+{
+	double start = 0, end = 0, average = 0;
+
+	string name = "results1.txt";
+	ofstream results1;
+	results1.open(name);
+
+	if (!results1.is_open())
+		cout << "Помилка відкриття файлу!" << endl;
+	else
+	{
+		for (int i = m; i < n1; i += k)
+		{
+			average = 0;
+
+			for (int j = 0; j < count; j++)
+			{
+				start = clock();
+
+				int m = i, n = i + 1;
+
+				int** MatrixA = CreateMatrix(m, n);
+				int** MatrixB = CreateMatrix(m, n);
+
+				SwapCols(MatrixA, m, n, NULL);
+
+				RemoveMem(MatrixA, m);
+				RemoveMem(MatrixB, m);
+
+				end = (clock() - start) / 1000;
+
+				average += end;
+
+				cout << "Час виконання програми на кількості данних Другого алгоритму: " << i << ": " << end << endl;
+				results1 << "Час виконання програми на кількості данних Другого алгоритму: " << i << ": " << end << endl;
+			}
+
+			average = average / count;
+
+			cout << endl << "Середнє арифметичне(" << i << "): " << average << endl << endl;
+			results1 << endl << "Середнє арифметичне(" << i << "): " << average << endl << endl;
+		}
+	}
+
+	results1.close();
+}
 int main()
 {
 	int n1 = 0;
-	
+	int k = 0;
+	int count = 0;
 	SetConsoleOutputCP(1251);
 	SetConsoleCP(1251);
 
@@ -282,24 +329,30 @@ int main()
 		int maxB = FindMax(MatrixB, m, n);
 
 		//ZbilshitiMatrix(MatrixA, m, n, maxB);
-		
 		//MeasureAlgoritmTime(ZbilshitiMatrix, MatrixA, m, n, maxB);
-
 		//SwapCols(MatrixA, m, n);
+		//MeasureAlgoritmTime(SwapCols, MatrixA, m, n, NULL);
 
-		//MeasureAlgoritmTime(SwapCols, MatrixA, m, n, 0);
 
+		cout << "Замір часу для першого алгоритму: " << endl;
 		cout << "Max element matrix B: " << maxB << endl << endl;
-		int k;
-		int count;
 		cout << "Amount of itarationns: ";
 		cin >> count;
 		cout << "Krok: ";
 		cin >> k;
-		cout << " Put n1: ";
+		cout << "Put max matrix size: ";
 		cin >> n1;
-		time(m, count, k, n1);
+		time1(m, count, k, n1);
 		
+		cout << "Замір часу для другого алгоритму: " << endl;
+		cout << "Amount of itarationns: ";
+		cin >> count;
+		cout << "Krok: ";
+		cin >> k;
+		cout << "Put max matrix size: ";
+		cin >> n1;
+		time2(m, count, k, n1);
+
 		cout << "You wanna see the modified matrix? (1/0)" << endl;
 		cin >> vibir;
 		cout << "Modified matrix A: " << endl;
