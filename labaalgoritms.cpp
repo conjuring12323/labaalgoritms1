@@ -37,23 +37,6 @@ int FindMax(int** matrix, int n, int m)
 	return maximum;
 }
 
-//Функція для збільшення елементів матриці
-void ZbilshitiMatrix(int** matrix, int m, int n, int zxc)
-{
-	for (int i = 0; i < m; i++) {
-		for (int j = 0; j < n; j++) {
-			matrix[i][j] += zxc;
-		}
-	}
-}
-
-// Функція для заміни стовпців
-void SwapCols(int** matrix, int m, int n, int zxc)
-{
-	for (int i = 0; i < m; i++) {
-		swap(matrix[i][0], matrix[i][n - 1]);
-	}
-}
 
 // Функція для звільнення пам'яті, виділеної для матриці
 void RemoveMem(int** matrix, int m)
@@ -176,8 +159,77 @@ void MeasureAlgoritmTime(void(*function)(int**, int, int, int), int** matrix, in
 	cout << "Час виконання алгоритму : " << MeasureTime << " секунд" << endl;
 }
 
+//Функція для збільшення елементів матриці
+void ZbilshitiMatrix(int** matrix, int m, int n, int zxc)
+{
+	for (int i = 0; i < m; i++) {
+		for (int j = 0; j < n; j++) {
+			matrix[i][j] += zxc;
+		}
+	}
+}
+
+// Функція для заміни стовпців
+void SwapCols(int** matrix, int m, int n, int zxc)
+{
+	for (int i = 0; i < m; i++) {
+		swap(matrix[i][0], matrix[i][n - 1]);
+	}
+}
+void time(int m, int count, int k, int n1)
+{
+	double start = 0, end = 0, average = 0;
+
+	string name = "results.txt";
+	ofstream results;
+	results.open(name);
+
+	if (!results.is_open())
+		cout << "Помилка відкриття файлу!" << endl;
+	else
+	{
+		for (int i = m; i < n1; i += k)
+		{
+			average = 0;
+
+			for (int j = 0; j < count; j++)
+			{
+				start = clock();
+
+				int m = i, n = i + 1;
+
+				int** MatrixA = CreateMatrix(m, n);
+				int** MatrixB = CreateMatrix(m, n);
+
+				cout << "time of the first algoritm: ";
+				int maxB = FindMax(MatrixB, m, n);
+				ZbilshitiMatrix(MatrixA, m, n, maxB);
+
+
+				RemoveMem(MatrixA, m);
+				RemoveMem(MatrixB, m);
+
+				end = (clock() - start) / 1000;
+
+				average += end;
+
+				cout << "Час виконання програми на кількості данних " << i << ": " << end << endl;
+				results << "Час виконання програми на кількості данних " << i << ": " << end << endl;
+			}
+
+			average = average / count;
+
+			cout << endl << "Середнє арифметичне(" << i << "): " << average << endl << endl;
+			results << endl << "Середнє арифметичне(" << i << "): " << average << endl << endl;
+		}
+	}
+
+	results.close();
+}
 int main()
 {
+	int n1 = 0;
+	
 	SetConsoleOutputCP(1251);
 	SetConsoleCP(1251);
 
@@ -227,20 +279,26 @@ int main()
 			cout << endl;
 		}
 
-		
-
 		int maxB = FindMax(MatrixB, m, n);
 
-		
 		//ZbilshitiMatrix(MatrixA, m, n, maxB);
 		
-		MeasureAlgoritmTime(ZbilshitiMatrix, MatrixA, m, n, maxB);
+		//MeasureAlgoritmTime(ZbilshitiMatrix, MatrixA, m, n, maxB);
 
 		//SwapCols(MatrixA, m, n);
 
-		MeasureAlgoritmTime(SwapCols, MatrixA, m, n, 0);
+		//MeasureAlgoritmTime(SwapCols, MatrixA, m, n, 0);
 
 		cout << "Max element matrix B: " << maxB << endl << endl;
+		int k;
+		int count;
+		cout << "Amount of itarationns: ";
+		cin >> count;
+		cout << "Krok: ";
+		cin >> k;
+		cout << " Put n1: ";
+		cin >> n1;
+		time(m, count, k, n1);
 		
 		cout << "You wanna see the modified matrix? (1/0)" << endl;
 		cin >> vibir;
@@ -291,10 +349,11 @@ int main()
 		// Запис складу у файл
 		file("a.txt", n * m);
 		file("b.txt", n * m);
-		/*
-		file_auto("a.txt", m, n, MatrixA);
-		file_auto("b.txt", m, n, MatrixB);
-		*/
+
+		
+		//file_auto("a.txt", m, n, MatrixA);
+		//file_auto("b.txt", m, n, MatrixB);
+		
 
 		cout << "You wanna see the  matrix? (1/0)" << endl;
 		cin >> vibir;
@@ -320,10 +379,13 @@ int main()
 		cout << "Invalid choice. Exiting program." << endl;
 	}
 
+	
+
 	RemoveMem(MatrixA, m);
 	RemoveMem(MatrixB, m);
 
 	return 0;
+	
 }
 
 
