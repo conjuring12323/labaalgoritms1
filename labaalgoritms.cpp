@@ -1,12 +1,13 @@
 ﻿#include <iostream> 
-#include <cmath> 
+#include<cmath>
 #include <cstdlib> 
 #include <fstream>
 #include <ctime>
 #include <chrono>
 #include<Windows.h>
-using namespace std;
 
+using namespace std;
+using namespace std::chrono;
 
 
 // Вивід матриці в консоль
@@ -60,24 +61,25 @@ void Replace(int** MatrixA, int** MatrixB, int m, int n, int minA)
 	}
 }
 */
-
-// Функція для створення і генерації чисел для матриці
-int** CreateMatrix(int m, int n)
+// Функція для створення матриці
+int** CreateEmptyMatrix(int m, int n)
 {
 	int** matrix = new int* [m];
 	for (int i = 0; i < m; ++i) {
 		matrix[i] = new int[n];
 	}
-
-	// Заповнення матриці випадковими числами
-	for (int i = 0; i < m; ++i) {
-		for (int j = 0; j < n; ++j) {
-			matrix[i][j] = rand() % 20 - 10; // Генеруємо випадкові числа від -10 до 9
-		}
-	}
-
 	return matrix;
 }
+void FillMatrixWithRandomNumbers(int** matrix, int m, int n)
+{
+	for (int i = 0; i < m; ++i) {
+		for (int j = 0; j < n; ++j) {
+			matrix[i][j] = rand() % 20 - 10; // Генеруємо випадкові числа від minVal до maxVal
+		}
+	}
+}
+
+
 
 // Записуємо матрицю в текстовий файл
 void file(const string& file_name, int n)
@@ -123,41 +125,8 @@ void WriteMatrixToFile(ofstream& ofs, int** matrix, int m, int n, const string& 
 	ofs << endl;
 }
 
-/*
-// Функція для вимірювання часу виконання алгоритму в мілісекундах
-double MeasureAlgorithmTimeMilliseconds(void(*function)(int**, int, int, int), int** matrix, int m, int n, int zxc)
-{
-	// Визначення типу для точки початку та кінця часу
-	using Clock = std::chrono::high_resolution_clock;
 
-	// Позначка часу до виконання алгоритму
-	auto start = Clock::now();
 
-	// Виконання алгоритму
-	function(matrix, m, n, zxc);
-
-	// Позначка часу після виконання алгоритму
-	auto end = Clock::now();
-
-	// Обчислення часу виконання у мілісекундах
-	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-
-	// Повертаємо час виконання у мілісекундах у вигляді double
-	return duration.count();
-}
-*/
-
-void MeasureAlgoritmTime(void(*function)(int**, int, int, int), int** matrix, int m, int n, int zxc)
-{
-	clock_t Start_t = clock();
-
-	function(matrix, m, n, zxc);// Викликаємо ваш алгоритм
-
-	clock_t End_t = clock();
-	double MeasureTime = static_cast<double>(End_t - Start_t) / CLOCKS_PER_SEC;
-
-	cout << "Час виконання алгоритму : " << MeasureTime << " секунд" << endl;
-}
 
 //Функція для збільшення елементів матриці
 void ZbilshitiMatrix(int** matrix, int m, int n, int zxc)
@@ -170,12 +139,122 @@ void ZbilshitiMatrix(int** matrix, int m, int n, int zxc)
 }
 
 // Функція для заміни стовпців
-void SwapCols(int** matrix, int m, int n, int zxc)
+void SwapCols(int** matrix, int m, int n)
 {
 	for (int i = 0; i < m; i++) {
 		swap(matrix[i][0], matrix[i][n - 1]);
 	}
 }
+//void time1(int m, int count, int k, int n1)
+//{
+//	double start = 0, end = 0, average = 0;
+//
+//	string name = "results1.txt";
+//	ofstream results1;
+//	results1.open(name);
+//
+//	if (!results1.is_open())
+//		cout << "Помилка відкриття файлу!" << endl;
+//	else
+//	{
+//		for (int i = m; i < n1; i += k)
+//		{
+//			average = 0;
+//
+//			for (int j = 0; j < count; j++)
+//			{
+//
+//
+//				int m = i, n = i + 1;
+//
+//				int** MatrixA = CreateEmptyMatrix(m, n);
+//				FillMatrixWithRandomNumbers(MatrixA, m, n);
+//				int** MatrixB = CreateEmptyMatrix(m, n);
+//				FillMatrixWithRandomNumbers(MatrixB, m, n);
+//
+//				high_resolution_clock::time_point start = high_resolution_clock::now();
+//
+//				int maxB = FindMax(MatrixB, m, n);
+//				ZbilshitiMatrix(MatrixA, m, n, maxB);
+//
+//				high_resolution_clock::time_point end = high_resolution_clock::now();
+//
+//				RemoveMem(MatrixA, m);
+//				RemoveMem(MatrixB, m);
+//
+//				duration<double> time_span = duration_cast<duration<double>>(end - start);
+//
+//				average += time_span.count();
+//
+//				cout << "Час виконання програми на кількості данних першого алгоритму: " << i << ": " << time_span.count() << endl;
+//				results1 << "Час виконання програми на кількості данних першого алгоритму: " << i << ": " << time_span.count() << endl;
+//			}
+//
+//			average = average / count;
+//
+//			cout << endl << "Середнє арифметичне(" << i << "): " << average << endl << endl;
+//			results1 << endl << "Середнє арифметичне(" << i << "): " << average << endl << endl;
+//		}
+//	}
+//
+//	results1.close();
+//}
+
+//void time2(int m, int count, int k, int n1)
+//{
+//	double start = 0, end = 0, average = 0;
+//
+//	string name = "results2.txt";
+//	ofstream results2;
+//	results2.open(name);
+//
+//	if (!results2.is_open())
+//		cout << "Помилка відкриття файлу!" << endl;
+//	else
+//	{
+//		for (int i = m; i < n1; i += k)
+//		{
+//			average = 0;
+//
+//			for (int j = 0; j < count; j++)
+//			{
+//
+//
+//				int m = i, n = i + 1;
+//
+//				int** MatrixA = CreateEmptyMatrix(m, n);
+//				FillMatrixWithRandomNumbers(MatrixA, m, n);
+//				int** MatrixB = CreateEmptyMatrix(m, n);
+//				FillMatrixWithRandomNumbers(MatrixB, m, n);
+//
+//				high_resolution_clock::time_point start = high_resolution_clock::now();
+//
+//				SwapCols(MatrixA, m, n);
+//
+//				high_resolution_clock::time_point end = high_resolution_clock::now();
+//
+//				RemoveMem(MatrixA, m);
+//				RemoveMem(MatrixB, m);
+//
+//				duration<double> time_span = duration_cast<duration<double>>(end - start);
+//
+//				average += time_span.count();
+//
+//				cout << "Час виконання програми на кількості данних Другого алгоритму: " << i << ": " << time_span.count() << endl;
+//				results2 << "Час виконання програми на кількості данних Другого алгоритму: " << i << ": " << time_span.count() << endl;
+//			}
+//
+//			average = average / count;
+//
+//			cout << endl << "Середнє арифметичне(" << i << "): " << average << endl << endl;
+//			results2 << endl << "Середнє арифметичне(" << i << "): " << average << endl << endl;
+//		}
+//	}
+//
+//	results2.close();
+//}
+
+
 void time1(int m, int count, int k, int n1)
 {
 	double start = 0, end = 0, average = 0;
@@ -194,21 +273,25 @@ void time1(int m, int count, int k, int n1)
 
 			for (int j = 0; j < count; j++)
 			{
-				start = clock();
 
 				int m = i, n = i + 1;
 
-				int** MatrixA = CreateMatrix(m, n);
-				int** MatrixB = CreateMatrix(m, n);
+				int** MatrixA = CreateEmptyMatrix(m, n);
+				FillMatrixWithRandomNumbers(MatrixA, m, n);
+				int** MatrixB = CreateEmptyMatrix(m, n);
+				FillMatrixWithRandomNumbers(MatrixB, m, n);
 
-				
+				start = clock();
+
+
 				int maxB = FindMax(MatrixB, m, n);
 				ZbilshitiMatrix(MatrixA, m, n, maxB);
+				end = (clock() - start) / 1000;
 
 				RemoveMem(MatrixA, m);
 				RemoveMem(MatrixB, m);
 
-				end = (clock() - start) / 1000;
+				
 
 				average += end;
 
@@ -225,15 +308,17 @@ void time1(int m, int count, int k, int n1)
 
 	results.close();
 }
+
+
 void time2(int m, int count, int k, int n1)
 {
 	double start = 0, end = 0, average = 0;
 
-	string name = "results1.txt";
-	ofstream results1;
-	results1.open(name);
+	string name = "results_1.txt";
+	ofstream results_1;
+	results_1.open(name);
 
-	if (!results1.is_open())
+	if (!results_1.is_open())
 		cout << "Помилка відкриття файлу!" << endl;
 	else
 	{
@@ -243,35 +328,45 @@ void time2(int m, int count, int k, int n1)
 
 			for (int j = 0; j < count; j++)
 			{
-				start = clock();
+				// поставить точку отчета между функцией свапколлс
 
 				int m = i, n = i + 1;
 
-				int** MatrixA = CreateMatrix(m, n);
-				int** MatrixB = CreateMatrix(m, n);
+				int** MatrixA = CreateEmptyMatrix(m, n);
+				FillMatrixWithRandomNumbers(MatrixA, m, n);
+				int** MatrixB = CreateEmptyMatrix(m, n);
+				FillMatrixWithRandomNumbers(MatrixB, m, n);
 
-				SwapCols(MatrixA, m, n, NULL);
+				start = clock();
+
+				
+
+				SwapCols(MatrixA, m, n);
+
+
+				end = (clock() - start) / 1000;
 
 				RemoveMem(MatrixA, m);
 				RemoveMem(MatrixB, m);
 
-				end = (clock() - start) / 1000;
+				
 
 				average += end;
 
 				cout << "Час виконання програми на кількості данних Другого алгоритму: " << i << ": " << end << endl;
-				results1 << "Час виконання програми на кількості данних Другого алгоритму: " << i << ": " << end << endl;
+				results_1 << "Час виконання програми на кількості данних Другого алгоритму: " << i << ": " << end << endl;
 			}
 
 			average = average / count;
 
 			cout << endl << "Середнє арифметичне(" << i << "): " << average << endl << endl;
-			results1 << endl << "Середнє арифметичне(" << i << "): " << average << endl << endl;
+			results_1 << endl << "Середнє арифметичне(" << i << "): " << average << endl << endl;
 		}
 	}
 
-	results1.close();
+	results_1.close();
 }
+
 int main()
 {
 	int n1 = 0;
@@ -304,8 +399,10 @@ int main()
 		return 1;
 	}
 
-	int** MatrixA = CreateMatrix(m, n);
-	int** MatrixB = CreateMatrix(m, n);
+	int** MatrixA = CreateEmptyMatrix(m, n);
+	FillMatrixWithRandomNumbers(MatrixA, m, n);
+	int** MatrixB = CreateEmptyMatrix(m, n);
+	FillMatrixWithRandomNumbers(MatrixB, m, n);
 
 	cout << "1:записати матрицю в консоль;" << endl;
 	cout << "2:записати матрицю в файл;" << endl;
@@ -328,11 +425,7 @@ int main()
 
 		int maxB = FindMax(MatrixB, m, n);
 
-		ZbilshitiMatrix(MatrixA, m, n, maxB);
-		MeasureAlgoritmTime(ZbilshitiMatrix, MatrixA, m, n, maxB);
-		SwapCols(MatrixA, m, n, NULL);
-		MeasureAlgoritmTime(SwapCols, MatrixA, m, n, NULL);
-
+		
 		
 		cout << "Замір часу для першого алгоритму: " << endl;
 		cout << "Max element matrix B: " << maxB << endl << endl;
@@ -343,6 +436,7 @@ int main()
 		cout << "Put max matrix size: ";
 		cin >> n1;
 		time1(m, count, k, n1);
+
 		
 		cout << "Замір часу для другого алгоритму: " << endl;
 		cout << "Amount of itarationns: ";
